@@ -3,9 +3,9 @@ from selenium.webdriver.common.by import By
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(__file__).replace('parsing-new-script', 'global-files/'))
-from GlobalFunctions import *
+sys.path.insert(0, os.path.dirname(__file__).replace('python-files','global-files/'))
 from GlobalVariable import *
+from GlobalFunctions import *
 
 try:
 
@@ -24,13 +24,9 @@ try:
 
     driver.get(scrappedUrl)
 
-
+    error = ' '
     raw = driver.find_elements(By.XPATH, "//div[@class='second']/ul//li//a")
     cmail = driver.find_element(By.XPATH, "/html/body/div/div[1]/div/a").get_attribute("href").split(":")[1]
-
-    print(raw) #elements
-    print(len(raw)) #81
-    print(cmail) #contact@iaria.org
 
     event_link_list = []
     for i in raw:
@@ -43,14 +39,12 @@ try:
         driver.get(event_link_list[k])
 
         e_link = event_link_list[k]
-        print(e_link)
 
         try:
             raw2 = driver.find_element(By.CLASS_NAME, "conflabels").text.split("\n")[-1].split(" - ")
 
             try:
                 event_name = driver.find_element(By.XPATH, "//div[@class='conflabels']/h2[1]").text
-                print(event_name)
             except:
                 event_name = ' '
 
@@ -58,14 +52,9 @@ try:
                 city = raw2[-1].split(",")[-2].strip()
                 country = raw2[-1].split(",")[-1].strip()
 
-                print(city)
-                print(country)
-
             except:
                 city = " "
                 country = " "
-                print(city)
-                print(country)
 
             if country:
                 emode = 0
@@ -74,9 +63,7 @@ try:
 
             try:
                 date_raw = raw2[0].split(" to ")
-
                 start_date_raw, end_date_raw = date_raw[0].split(","), date_raw[1].split(",")
-                #['March 13', ' 2023']  ['March 17', ' 2023']
                 year = start_date_raw[-1].strip() # 2023
                 s_m,e_m  = start_date_raw[0].split(" ")[0], end_date_raw[0].split(" ")[0]
                 starting_month, ending_month = GlobalVariable.months[s_m], GlobalVariable.months[e_m] #converting month with variable
@@ -84,9 +71,6 @@ try:
 
                 startdate = f"{year}-{starting_month}-{s_d}"
                 enddate = f"{year}-{ending_month}-{e_d}"
-
-                print(startdate)
-                print(enddate)
 
             except Exception as e:
                 startdate = " "
@@ -97,23 +81,17 @@ try:
                 driver.get(btn)
 
                 venue = driver.find_element(By.XPATH, "//p[@align='left'][2]//strong").text.title()
-                print(venue)
 
-                if venue:
-                    try:
-                        google_location = GlobalFunctions.get_google_map_url(venue, driver)
-                        print(google_location)
-                    except:
-                        google_location = ''
-                        print(google_location)
-                else:
-                    continue
+                # if venue:
+                #     try:
+                #         google_location = GlobalFunctions.get_google_map_url(venue, driver)
+                #     except:
+                #         google_location = ''
+                # else:
+                #     continue
 
             except Exception as e:
                 print(e)
-                print("Inside Except")
-
-            print("==========")
 
         except:
             continue
@@ -123,7 +101,7 @@ try:
 
         GlobalFunctions.appendRow(file_name, [scrappedUrl, event_name, startdate, enddate, '', '', '', '', orgName,
                                           orgWeb, '', '', '', '', '', city, country, venue, e_link,
-                                          google_location, cmail, '', emode])
+                                          """google_location""", cmail, '', emode])
 except Exception as e:
     pass
 

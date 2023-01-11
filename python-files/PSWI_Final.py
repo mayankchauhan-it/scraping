@@ -13,7 +13,7 @@ import requests
 from datetime import datetime
 import re
 
-sys.path.insert(0, os.path.dirname(__file__).replace('parsing-new-script/Completed','global-files/'))
+sys.path.insert(0, os.path.dirname(__file__).replace('python-files','global-files/'))
 from GlobalVariable import *
 from GlobalFunctions import *
 
@@ -153,3 +153,7 @@ try:
 except Exception as e:
     print(e)
     error = str(e)
+
+
+GlobalFunctions.update_scrpping_execution_status(file_name, error)
+driver.quit()

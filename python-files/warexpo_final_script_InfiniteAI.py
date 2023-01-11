@@ -15,7 +15,7 @@ from datetime import datetime
 import re
 
 
-sys.path.insert(0, os.path.dirname(__file__).replace('parsing-new-script/Completed','global-files/'))
+sys.path.insert(0, os.path.dirname(__file__).replace('python-files','global-files/'))
 from GlobalVariable import *
 from GlobalFunctions import *
 
