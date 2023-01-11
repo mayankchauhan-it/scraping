@@ -1,3 +1,4 @@
+# Created by : Mayank Chauhan
 import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -35,6 +36,8 @@ try:
     driver = webdriver.Chrome(options=options, executable_path=path)
 
     error = ''
+
+#Scrapped Url
     scraped_url = 'https://www.pswi.org/Education/Conferences'
 
     driver.get(scraped_url)
@@ -43,10 +46,10 @@ try:
 
     raw = driver.find_elements(By.XPATH, "//div[@class='row Pane']//p")
 
-    print(len(raw))
     
     for i in raw:
 
+#orgName & orgWeb:
         orgName = driver.find_element(By.XPATH, "//a[@id='dnn_dnnLogoXS_hypLogo']").get_attribute("title")
         orgWeb = driver.find_element(By.XPATH, "//a[@id='dnn_dnnLogoXS_hypLogo']").get_attribute("href")
 
@@ -57,29 +60,22 @@ try:
 
             new_raw_split = raw_split
 
-            print(new_raw_split)
-
-
+#event links:
             try:
                 event_link = i.find_element(By.TAG_NAME,"a").get_attribute("href")
-                print(event_link ,"==============")
 
             except:
                 event_link = ' '
 
-
-
-
+#Date & Time
             try:
                 date_raw = new_raw_split[1].split(",")
-                print(date_raw, ".....")
 
                 if len(date_raw)>1:
                     year, month = date_raw[-1].strip(), date_raw[-2].strip().split(" ")[0]
 
                     try:
                         event_name = new_raw_split[0]
-                        print(event_name, "event name")
                     except:
                         event_name = " "
 
@@ -93,9 +89,9 @@ try:
 
                         startDate, endDate = f"{year}-{GlobalVariable.months[month]}-{s_d}", f"{year}-{GlobalVariable.months[month]}-{e_d}"
                     
+#venue
                     try:
                         venue_raw = raw_split[2].split(",") 
-
 
                         try:
                             venue = venue_raw[0]
@@ -109,7 +105,7 @@ try:
                         else:
                             emode = 1
 
-
+#City & Country
                         try:
                             city = venue_raw[1].strip()
 
@@ -126,7 +122,8 @@ try:
 
                     except:
                         pass
-                    
+
+#contact information            
                     try:
                         cmail = driver.find_element(By.XPATH, "//ul[@class='psw-site-info']/li[1]/a").text
                     except:

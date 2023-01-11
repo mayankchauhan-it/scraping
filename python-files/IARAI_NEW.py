@@ -1,7 +1,18 @@
+# Created by : Mayank Chauhan
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 import sys
-import os
+import json
+from random import randint
+import time
+import requests
+from datetime import datetime
+import re
 
 sys.path.insert(0, os.path.dirname(__file__).replace('python-files','global-files/'))
 from GlobalVariable import *
@@ -35,6 +46,7 @@ try:
 
         event_link_list.append(event_link)
 
+#event link
     for k in range(len(event_link_list)):
         driver.get(event_link_list[k])
 
@@ -42,12 +54,12 @@ try:
 
         try:
             raw2 = driver.find_element(By.CLASS_NAME, "conflabels").text.split("\n")[-1].split(" - ")
-
+#event name
             try:
                 event_name = driver.find_element(By.XPATH, "//div[@class='conflabels']/h2[1]").text
             except:
                 event_name = ' '
-
+#city & country
             try:
                 city = raw2[-1].split(",")[-2].strip()
                 country = raw2[-1].split(",")[-1].strip()
@@ -60,7 +72,7 @@ try:
                 emode = 0
             else:
                 emode= 1
-
+#Date of the event
             try:
                 date_raw = raw2[0].split(" to ")
                 start_date_raw, end_date_raw = date_raw[0].split(","), date_raw[1].split(",")
@@ -76,6 +88,7 @@ try:
                 startdate = " "
                 enddate = " "
                 print(e)
+#venue
             try:
                 btn = driver.find_element(By.XPATH,"//div[@class='menudiv']//div[@class='dropdown'][2]//a[2]").get_attribute("href")
                 driver.get(btn)
